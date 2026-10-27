@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RABOOD AI Studio</title>
+<style>
+:root{--bg:#10131b;--panel:#1a2030;--line:#30394d;--gold:#f2b84b;--txt:#f5f6fa;--muted:#aeb7c8;--green:#63d69a}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#171d2c,#0d1017);color:var(--txt);font-family:system-ui,"Arial",sans-serif}
+header{padding:28px 18px 20px;text-align:center;background:#151b29;border-bottom:1px solid var(--line)}
+.logo{font-weight:900;letter-spacing:2px;color:var(--gold);font-size:28px}header p{margin:8px 0 0;color:var(--muted)}
+main{max-width:850px;margin:20px auto;padding:0 14px}
+nav{display:flex;gap:8px;overflow:auto;padding-bottom:12px}
+nav button,.btn{border:1px solid var(--line);background:var(--panel);color:var(--txt);padding:11px 15px;border-radius:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+nav button.active,.btn.primary{background:var(--gold);color:#171717;border-color:var(--gold)}
+.panel{display:none;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
+.panel.active{display:block}h2{margin:0 0 8px;font-size:21px}p.help{color:var(--muted);line-height:1.7;margin-top:4px}
+label{display:block;margin:14px 0 6px;color:#dbe1ed;font-weight:650}
+input,textarea,select{width:100%;padding:12px;border-radius:10px;border:1px solid var(--line);background:#111622;color:var(--txt);font:inherit}
+textarea{min-height:90px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.status{padding:12px;border-radius:12px;background:#111622;color:var(--green);margin-top:12px;line-height:1.6}
+.scene{border:1px solid var(--line);padding:12px;border-radius:12px;margin:10px 0;background:#141a27}
+.scene strong{color:var(--gold)}.muted{color:var(--muted);font-size:13px}
+footer{text-align:center;color:var(--muted);padding:25px;font-size:13px}
+@media(max-width:600px){.row{grid-template-columns:1fr}.logo{font-size:24px}}
+</style>
+</head>
+<body>
+<header><div class="logo">RABOOD AI</div><p>استوديو صناعة الحلقات الكرتونية العراقية</p></header>
+<main>
+<nav>
+<button class="active" data-tab="characters">الشخصيات</button>
+<button data-tab="motion">تحريك الصور</button>
+<button data-tab="voices">الأصوات</button>
+<button data-tab="episode">الحلقة</button>
+</nav>
+<section class="panel active" id="characters">
+<h2>🎭 تصميم الشخصيات</h2><p class="help">رتّب وصف شخصيات عالم ربود وكرحوت واحفظ ملاحظاتك داخل المشروع.</p>
+<label>اسم الشخصية</label><input id="charName" placeholder="مثلاً: ربود">
+<label>وصف الشخصية</label><textarea id="charDesc" placeholder="العمر، الشكل، الملابس، الطباع..."></textarea>
+<div class="actions"><button class="btn primary" id="addChar">إضافة الشخصية</button></div>
+<div id="charList"></div>
+</section>
+<section class="panel" id="motion">
+<h2>🎬 تجهيز تحريك صورة</h2><p class="help">اختر صورة شخصية واكتب الحركة المطلوبة. هذه النسخة تحفظ تعليمات التحريك فقط؛ لا تنشئ فيديو فعلياً بعد.</p>
+<label>اختيار صورة</label><input type="file" id="imageFile" accept="image/*">
+<div id="preview" class="muted">لم يتم اختيار صورة بعد.</div>
+<label>وصف الحركة</label><textarea id="motionText" placeholder="مثلاً: ربود يلتفت لجده ويحرك فمه أثناء الكلام"></textarea>
+<div class="status">ملاحظة: توليد الفيديو وتحريك الشفاه يحتاج ربط محرك ذكاء اصطناعي خارجي.</div>
+</section>
+<section class="panel" id="voices">
+<h2>🎙️ الأصوات</h2><p class="help">ارفع ملفات صوتية محلية لتنظيمها مع الحلقة. لا يتم رفعها إلى الإنترنت.</p>
+<label>اختيار ملف صوتي</label><input type="file" id="audioFile" accept="audio/*">
+<div id="audioName" class="muted">لم يتم اختيار ملف صوتي.</div>
+</section>
+<section class="panel" id="episode">
+<h2>📺 تجميع الحلقة</h2><p class="help">أضف المشاهد وحدد مدتها. الهدف المقترح للحلقة دقيقتان (120 ثانية).</p>
+<div class="row"><div><label>عنوان الحلقة</label><input id="episodeTitle" value="ربود وكرحوت - الحلقة الأولى"></div><div><label>مدة المشهد بالثواني</label><input id="sceneDuration" type="number" min="1" value="15"></div></div>
+<label>وصف المشهد أو الحوار</label><textarea id="sceneText" placeholder="اكتب أحداث المشهد والحوار..."></textarea>
+<div class="actions"><button class="btn primary" id="addScene">إضافة المشهد</button><button class="btn" id="exportProject">تصدير ملف المشروع JSON</button></div>
+<div class="status" id="total">المدة الحالية: 0 من 120 ثانية</div><div id="sceneList"></div>
+</section>
+</main>
+<footer>RABOOD AI · نسخة أولية تعمل محلياً في المتصفح</footer>
+<script>
+const $=id=>document.getElementById(id);
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.panel').forEach(x=>x.classList.remove('active'));b.classList.add('active');$(b.dataset.tab).classList.add('active')});
+let characters=[],scenes=[];
+$('addChar').onclick=()=>{let name=$('charName').value.trim(),desc=$('charDesc').value.trim();if(!name)return alert('اكتب اسم الشخصية أولاً');characters.push({name,description:desc});$('charList').innerHTML=characters.map(c=>`<div class="scene"><strong>${esc(c.name)}</strong><div>${esc(c.description)}</div></div>`).join('');$('charName').value='';$('charDesc').value=''};
+$('imageFile').onchange=e=>{$('preview').textContent=e.target.files[0]?.name||'لم يتم اختيار صورة بعد.'};
+$('audioFile').onchange=e=>{$('audioName').textContent=e.target.files[0]?.name||'لم يتم اختيار ملف صوتي.'};
+$('addScene').onclick=()=>{let text=$('sceneText').value.trim(),duration=Number($('sceneDuration').value);if(!text||duration<1)return alert('اكتب وصف المشهد وحدد مدة صحيحة');scenes.push({text,duration});$('sceneText').value='';renderScenes()};
+function renderScenes(){let sum=scenes.reduce((a,s)=>a+s.duration,0);$('total').textContent=`المدة الحالية: ${sum} من 120 ثانية ${sum>120?'— تجاوزت دقيقتين':''}`;$('sceneList').innerHTML=scenes.map((s,i)=>`<div class="scene"><strong>المشهد ${i+1}</strong> · ${s.duration} ثانية<div>${esc(s.text)}</div></div>`).join('')}
+$('exportProject').onclick=()=>{let data={project:'RABOOD AI',episodeTitle:$('episodeTitle').value,characters,scenes};let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='rabood-ai-project.json';a.click();URL.revokeObjectURL(a.href)};
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+</script>
+</body></html>
